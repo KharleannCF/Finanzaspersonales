@@ -1,0 +1,16 @@
+extends ../base.pug
+block contenido   
+    h1 Editar moneda
+    form(action='/app/moneda/'+id+'/edit?_method=PUT' method='POST')
+        div
+            label(for='nombre') Nombre: 
+            input(type='text' name='nombre' id='nombre' value=nombre)
+            label(for='valor') Valor: 
+            input(type='number' name='valor' id='valor' value=valor)
+        div
+            input( type='submit' value='Guardar' class='btn btn-info')
+
+
+
+    a(href='/app') Volver a home
+            

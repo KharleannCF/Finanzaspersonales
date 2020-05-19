@@ -1,0 +1,30 @@
+extends ../../base.pug
+block contenido  
+    h1 #{nombre}
+        if nombre=='Monedas'
+            form(action='/app/moneda/edit' method='GET')
+                    input(type='submit' value='Nueva Moneda')
+            for moneda in elementos
+                a(href= '/app/moneda/' + moneda.id +'/edit')
+                    h3 #{moneda.nombre}
+                    h5 valor: #{moneda.valor} (reflejado en funcion del Bs)
+                form(action='/app/moneda/'+moneda.id+'/edit?_method=DELETE' method='POST')
+                    input(type='submit' value='Eliminar')
+        if nombre=='Categorias'
+            form(action='/app/categorias/edit' method='GET')
+                input(type='submit' value='Nueva Categoria')
+            for categoria in elementos
+                a(href= '/app/categorias/' + categoria.id +'/edit')
+                    h3 #{categoria.nombre}
+                    form(action='/app/categorias/'+categoria.id+'/edit?_method=DELETE' method='POST')
+                        input(type='submit' value='Eliminar')
+        if nombre=='Users'
+            for user in elementos
+                if user.id != 1
+                    a(href= '/app/clientes/' + user.id +'/edit')
+                        h3 #{user.nombre}
+                        h6 #{user.birthDate}
+                    form(action='/app/clientes/'+user.id+'/edit?_method=DELETE' method='POST')
+                        input(type='submit' value='Eliminar')
+
+        

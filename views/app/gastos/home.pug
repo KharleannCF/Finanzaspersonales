@@ -1,0 +1,28 @@
+extends ../../base.pug
+block contenido  
+    h1 Nuevo #{transaccion}
+    form(action='/app/gastos/'+ transaccion, method='POST', class='form-group')
+        div
+            label(for='categoria') Selecciona una categoria
+            select(id='categoria' name='categoria')
+                for categoria in categorias
+                    option(value=categoria.id) #{categoria.nombre}
+        div
+            label(for='titulo') titulo
+            input(type='text', name='titulo', placeholder='titulo', id='titulo')
+        div
+            label(for='monto') Monto
+            input(type='number' step='0.01' name='monto', placeholder='monto', id='monto')
+        div
+            select(id='moneda' name='moneda')
+                for moneda in monedas
+                    option(value=moneda.id) #{moneda.nombre}
+        div
+            label(for='descripcion') descripcion
+            br
+            textarea(rows='4' cols='50' name='descripcion' placeholder='descripcion' id='descripcion')
+        div
+            label(for='fecha') Fecha de la transaccion:
+            input(type='datetime-local', name='fecha', id='fecha')
+        div
+            input(type='submit' value='Registrar '+transaccion)

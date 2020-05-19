@@ -1,0 +1,29 @@
+extends ../base.pug
+block contenido   
+    div
+        h1 Hola #{nombre}
+        h3 Tienes unos ingresos de: #{ingresos[0].ingresos}
+        h3 Tienes unos gastos de: #{gastos[0].gastos}
+        h3 Tienes un balance de: #{balance}
+
+        if admin
+            h1 Panel de control
+            a(href='/app/admin/monedas') Cambios de moneda
+            br
+            a(href='/app/admin/categorias') Cambios de categorias
+            br
+            a(href='/app/admin/users') Cambios de clientes
+        h1 Finanzas personales
+        a(href='/app/perfil') Perfil
+        br
+        a(href='/app/categorias') Categorias personales
+        br
+        a(href='/app/gastos/gastos') registrar gasto
+        br
+        a(href='/app/gastos/ingresos') registrar ingreso
+         br
+        a(href='/app/gastos/gastos/listado') verificar gastos
+        br
+        a(href='/app/gastos/ingresos/listado') verificar ingresos
+
+

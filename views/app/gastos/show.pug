@@ -1,0 +1,13 @@
+extends ../../base.pug
+block contenido     
+    h1 #{elem.titulo}
+    ul
+        li categoria: #{elem.categoria}
+        li moneda: #{elem.moneda}
+        li descripcion: #{elem.descripcion}
+        li monto: #{elem.monto}
+        li fecha: #{elem.fecha}
+    br
+    a(href='/app/gastos/'+transaccion+'/'+elem.id+'/edit') Editar
+    form(action='/app/gastos/'+transaccion+'/'+elem.id+'/edit?_method=DELETE' method='POST')
+                    input(type='submit' value='Eliminar')

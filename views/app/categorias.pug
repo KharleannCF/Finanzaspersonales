@@ -1,0 +1,14 @@
+extends ../base.pug
+block contenido  
+    h1 Editar categoria
+    form(action='/app/categorias/'+id+'/edit?_method=PUT' method='POST')
+        div
+            label(for='nombre') Nombre: 
+            input(type='text' name='nombre' id='nombre' value=nombre)
+        div
+            input( type='submit' value='Guardar' class='btn btn-info')
+
+
+
+    a(href='/app') Volver a home
+        

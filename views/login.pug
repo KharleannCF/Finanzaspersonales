@@ -1,0 +1,18 @@
+extends ./base.pug
+block contenido
+    div
+        if incorrecto
+            p Usuario o contraseña incorrectos
+        form(action='/users/login', method='POST', class='form-group')
+            div
+                label(for='email') Email
+                input(type='email', name='email', placeholder='Email', id='email')
+            div       
+                label(for='password') Password
+                input(type='password', name='password', placeholder='password', id='password')
+            div       
+                input(type='submit' value='Iniciar sesión' class='btn btn-info')
+
+            
+
+                

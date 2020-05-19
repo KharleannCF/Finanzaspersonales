@@ -1,0 +1,10 @@
+extends ../../base.pug
+block contenido  
+    h1 Lista de #{transaccion}
+    for elemento in lista
+        a(href='/app/gastos/'+transaccion+'/'+elemento.id)
+            h3 #{elemento.titulo}
+        ul
+            li
+                p monto: #{elemento.monto} #{elemento.moneda}
+                

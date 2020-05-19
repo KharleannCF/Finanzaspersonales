@@ -1,0 +1,30 @@
+extends ./base.pug
+block contenido    
+    div
+        form(action='/users', method='POST')
+            div
+                label(for='email') Email
+                input(type='email', name='email', placeholder='Email', id='email')
+            div
+                label(for='name') name
+                input(type='text', name='name', placeholder='name', id='name')
+            if segundointento
+                p password no coincidente
+            div
+                label(for='password') Password
+                input(type='password', name='password', placeholder='password', id='password')
+            div
+                label(for='passwordConfirmation') Password Confirm
+                input(type='password', name='passwordConfirmation', placeholder='password', id='passwordConfirmation')
+            div
+                label(for='birthDate') Fecha de nacimiento
+                input(type='date', name='birthDate', placeholder='birthDate', id='birthDate')
+            div
+                label(for='isAdmin') Administrador
+                input(type='checkbox', name='isAdmin', placeholder='isAdmin', id='isAdmin')
+            div
+                input(type='submit' value='Iniciar sesión' class='btn btn-info')
+
+            
+
+                
