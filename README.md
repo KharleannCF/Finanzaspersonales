@@ -23,7 +23,7 @@ Para ejecutar el proyecto es necesario instalar las dependencias para esto es ne
  para garantizar su funcionamiento, para esto es posible usar XAMPP (En este caso activar también el servidor apache) o MySQL
  
  En el archivo *credentials.js* cambiar los datos por los correspondientes a la computadora donde se prueben
- Es necesario el que el usuario tenga permisos de administrador en el servidor de MySQL (se recomienda el usuario root) pues esté creará una nueva
+ Es necesario el que el usuario tenga permisos de administrador en el servidor de MySQL (se recomienda el usuario root) pues esté creará una nueva, En la primera ejecucion el sistema devolverá un error, pues la base de datos no se encuentra en ese momento, en la segunda ejecución funciona correctamente.
  base de datos con sus respectivas tablas a medida que se avance en la aplicación.
  Debido a compatibilidades con el module *mysql* de Node es necesario que el servidor de MySQL tenga las autenticaciones legacy, es decir, usar las autenticaciones de MySQL 5.x
  
