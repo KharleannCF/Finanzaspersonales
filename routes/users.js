@@ -45,7 +45,7 @@ router.get('/', (req, res) => {
 
 router.post('/', (req, res) => {
     let imgLink = null;
-    if (req.files.image.size) {
+    if (req.files.image) {
         let extension = req.files.imagen.name.split('.').pop();
         imgLink = 'public/images/' + req.body.name + 'avatar.' + extension;
         fs.rename(req.files.imagen.path, imgLink, (err) => {

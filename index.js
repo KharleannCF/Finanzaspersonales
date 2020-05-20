@@ -11,6 +11,7 @@ const methodOverride = require('method-override');
 let formidable = require('express-form-data');
 const http = require('http');
 const socket = require('./sockets');
+let credenciales = require('./credentials')
 
 let db = '';
 
@@ -27,16 +28,16 @@ socket(server, session({
 app.get('/', (req, res) => {
     let sql = 'CREATE DATABASE IF NOT EXISTS finanzas';
     mysql.createConnection({
-        host: 'localhost',
-        user: 'root',
-        password: ''
+        host: credenciales.server,
+        user: credenciales.user,
+        password: credenciales.password
     }).query(sql, (err, result) => {
         if (err) throw err
     });
     db = mysql.createConnection({
-        host: 'localhost',
-        user: 'root',
-        password: '',
+        host: credenciales.server,
+        user: credenciales.user,
+        password: credenciales.password,
         database: 'finanzas'
     });
     db.connect((err) => {
