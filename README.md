@@ -26,7 +26,7 @@ Para ejecutar el proyecto es necesario instalar las dependencias para esto es ne
  Es necesario el que el usuario tenga permisos de administrador en el servidor de MySQL pues esté creará una nueva
  base de datos con sus respectivas tablas a medida que se avance en la aplicación.
  
- ###EndPoints
+ ### EndPoints
  
   - localhost:8080/users
     - Registro de un nuevo usuario
