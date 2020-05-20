@@ -6,7 +6,7 @@
   ```
   - Yarn
   - Node.js
-  - MySQL
+  - MySQL (con las autenticaciones legacy)
   ```
 
 ### Instalación de dependencias
@@ -25,6 +25,7 @@ Para ejecutar el proyecto es necesario instalar las dependencias para esto es ne
  En el archivo *credentials.js* cambiar los datos por los correspondientes a la computadora donde se prueben
  Es necesario el que el usuario tenga permisos de administrador en el servidor de MySQL (se recomienda el usuario root) pues esté creará una nueva
  base de datos con sus respectivas tablas a medida que se avance en la aplicación.
+ Debido a compatibilidades con el module *mysql* de Node es necesario que el servidor de MySQL tenga las autenticaciones legacy, es decir, usar las autenticaciones de MySQL 5.x
  
  ### EndPoints
  
