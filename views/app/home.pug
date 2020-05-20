@@ -2,9 +2,14 @@ extends ../base.pug
 block contenido   
     div
         h1 Hola #{nombre}
-        h3 Tienes unos ingresos de: #{ingresos[0].ingresos}
-        h3 Tienes unos gastos de: #{gastos[0].gastos}
-        h3 Tienes un balance de: #{balance}
+        if ingresos
+            h3 Tienes unos ingresos de: #{ingresos.toFixed(2)}
+        if gastos
+            h3 Tienes unos gastos de: #{gastos.toFixed(2)}
+        if balance
+            h3 Tienes un balance de: #{balance.toFixed(2)}
+        else
+            h3 No tienes transacciones registradas
 
         if admin
             h1 Panel de control
@@ -12,7 +17,7 @@ block contenido
             br
             a(href='/app/admin/categorias') Cambios de categorias
             br
-            a(href='/app/admin/users') Cambios de clientes
+            a(href='/app/admin/clientes') Cambios de clientes
         h1 Finanzas personales
         a(href='/app/perfil') Perfil
         br
@@ -25,5 +30,7 @@ block contenido
         a(href='/app/gastos/gastos/listado') verificar gastos
         br
         a(href='/app/gastos/ingresos/listado') verificar ingresos
+        br
+        a(href='/app/reportes') Generar reportes
 
 

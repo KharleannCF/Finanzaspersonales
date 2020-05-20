@@ -4,9 +4,12 @@ block contenido
     form(action='/app/gastos/'+transaccion+'/'+elem.id+'/edit?_method=PUT' method='POST')
         div
             label(for='categoria') Selecciona una categoria
-            select(id='categoria' name='categoria' value=elem.categoria)
+            select(id='categoria' name='categoria').value #{elem.categoria}
                 for categoria in categorias
-                    option(value=categoria.id) #{categoria.nombre}
+                    if elem.categoria == categoria.id
+                        option(value=categoria.id selected=true) #{categoria.nombre}
+                    else
+                        option(value=categoria.id) #{categoria.nombre}
         div
             label(for='titulo') titulo
             input(type='text', name='titulo', placeholder='titulo', id='titulo' value=elem.titulo)
@@ -14,13 +17,18 @@ block contenido
             label(for='monto') Monto
             input(type='number' value=elem.monto step='0.01' name='monto', placeholder='monto', id='monto')
         div
-            select(id='moneda' name='moneda' value=elem.moneda)
+            select(id='moneda' name='moneda').value #{elem.moneda}
                 for moneda in monedas
-                    option(value=moneda.id) #{moneda.nombre}
+                    if elem.moneda == moneda.id
+                        option(value=moneda.id selected=true) #{moneda.nombre}
+                    else
+                        option(value=moneda.id) #{moneda.nombre}
+                    
         div
             label(for='descripcion') descripcion
             br
-            textarea(rows='4' cols='50' name='descripcion' value=elem.descripcion placeholder='descripcion' id='descripcion')
+            textarea(rows='4' cols='50' name='descripcion' placeholder='descripcion' id='descripcion').value #{elem.descripcion}
+            
         div
             label(for='fecha') Fecha de la transaccion:
             input(type='datetime-local', name='fecha', id='fecha' value=elem.fecha)

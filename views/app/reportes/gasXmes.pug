@@ -1,0 +1,12 @@
+extends ../../base.pug
+block contenido
+    h1 Reporte
+    h2 Gastos por Categoria por mes seleccionado
+    br
+    form(action='/app/reportes/gasXmes' method='POST')
+        label(for='mes') Selecciona un mes: 
+        select(id='mes' name='mes')
+            each mes, index in ['-- Selecciona un mes --',"Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]
+                option(value=index) #{mes}
+        input(type='submit' value='Generar')
+        

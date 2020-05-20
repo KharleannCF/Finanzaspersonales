@@ -1,14 +1,19 @@
 extends ../base.pug
 block contenido   
     h1 Editar cliente
-    form(action='/app/clientes/'+id+'/edit?_method=PUT' method='POST')
+    form(action='/app/clientes/'+id+'/edit?_method=PUT' enctype='multipart/form-data' method='POST')
         div
             label(for='nombre') Nombre: 
             input(type='text' name='nombre' id='nombre' value=nombre)
             label(for='birthDate') Fecha de nacimiento: 
             input(type='date' name='birthDate' id='birthDate' value=birthDate)
         div
+            label(for='imagen') Imagen de Perfil: 
+            input(type='file', name='imagen', placeholder='imagen', id='imagen')
+        div
             input( type='submit' value='Guardar' class='btn btn-info')
+    if imagen != null
+        img(src='/static/images/'+imagen.split('/').pop())
 
 
 

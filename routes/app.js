@@ -3,6 +3,23 @@ const router = express.Router();
 const db = require('../dataconnect');
 const adminfinder = require('../middlewares/adminfinder');
 const gastosRouter = require('./gastosRouter')
+const reportesRouter = require('./reportesRouter')
+const fs = require('fs');
+
+
+function formatDate(date) {
+    var d = new Date(date),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+    if (month.length < 2)
+        month = '0' + month;
+    if (day.length < 2)
+        day = '0' + day;
+
+    return [year, month, day].join('-');
+}
 
 router.get('/', (req, res) => {
     //monedas
@@ -22,7 +39,7 @@ router.get('/', (req, res) => {
     })
 
     //categorias
-    sql = 'CREATE TABLE IF NOT EXISTS categorias(id INT AUTO_INCREMENT, nombre VARCHAR(255), creatorId INT, PRIMARY KEY (id), FOREIGN KEY (creatorId) REFERENCES users(id))';
+    sql = 'CREATE TABLE IF NOT EXISTS categorias(id INT AUTO_INCREMENT, nombre VARCHAR(255), creatorId INT, PRIMARY KEY (id), FOREIGN KEY (creatorId) REFERENCES clientes(id))';
     db.query(sql, (err, result) => { if (err) { throw err } });
     sql = 'SELECT * FROM categorias';
     db.query(sql, (err, result) => {
@@ -34,9 +51,9 @@ router.get('/', (req, res) => {
         }
     })
 
-    sql = 'CREATE TABLE IF NOT EXISTS ingresos(id INT AUTO_INCREMENT, categoria INT, descripcion VARCHAR(255), titulo VARCHAR(255), moneda INT, monto FLOAT, fecha DATE, creatorId INT, PRIMARY KEY (id), FOREIGN KEY (creatorId) REFERENCES users(id), FOREIGN KEY (categoria) REFERENCES categorias(id), FOREIGN KEY (moneda) REFERENCES monedas(id))';
+    sql = 'CREATE TABLE IF NOT EXISTS ingresos(id INT AUTO_INCREMENT, categoria INT, descripcion VARCHAR(255), titulo VARCHAR(255), moneda INT, monto FLOAT, fecha DATETIME, creatorId INT, PRIMARY KEY (id), FOREIGN KEY (creatorId) REFERENCES clientes(id), FOREIGN KEY (categoria) REFERENCES categorias(id), FOREIGN KEY (moneda) REFERENCES monedas(id))';
     db.query(sql, (err, result) => { if (err) { throw err } });
-    sql = 'CREATE TABLE IF NOT EXISTS gastos(id INT AUTO_INCREMENT, categoria INT,descripcion VARCHAR(255) , titulo VARCHAR(255), moneda INT, monto FLOAT, fecha DATE, creatorId INT, PRIMARY KEY (id), FOREIGN KEY (creatorId) REFERENCES users(id), FOREIGN KEY (categoria) REFERENCES categorias(id), FOREIGN KEY (moneda) REFERENCES monedas(id))';
+    sql = 'CREATE TABLE IF NOT EXISTS gastos(id INT AUTO_INCREMENT, categoria INT,descripcion VARCHAR(255) , titulo VARCHAR(255), moneda INT, monto FLOAT, fecha DATETIME, creatorId INT, PRIMARY KEY (id), FOREIGN KEY (creatorId) REFERENCES clientes(id), FOREIGN KEY (categoria) REFERENCES categorias(id), FOREIGN KEY (moneda) REFERENCES monedas(id))';
     db.query(sql, (err, result) => { if (err) { throw err } });
     sql = `SELECT SUM(monto) AS ingresos FROM ingresos WHERE creatorId ='${res.locals.user.id}'`
     db.query(sql, (err, ingresos) => {
@@ -44,7 +61,7 @@ router.get('/', (req, res) => {
         sql = `SELECT SUM(monto) AS gastos FROM gastos WHERE creatorId ='${res.locals.user.id}'`
         db.query(sql, (err, gastos) => {
             if (err) throw err;
-            res.render('app/home', { nombre: res.locals.user.nombre, admin: res.locals.user.isAdmin, ingresos: ingresos, gastos: gastos, balance: ingresos[0].ingresos - gastos[0].gastos })
+            res.render('app/home', { nombre: res.locals.user.nombre, admin: res.locals.user.isAdmin, ingresos: ingresos[0].ingresos, gastos: gastos[0].gastos, balance: (ingresos[0].ingresos - gastos[0].gastos) })
         })
     })
 
@@ -81,13 +98,13 @@ router.route('/moneda/:id/edit')
         let sql = `UPDATE monedas SET nombre='${req.body.nombre}', valor='${req.body.valor}'  WHERE id = ${req.params.id}`
         db.query(sql, (err, result) => {
             if (err) throw err;
-            res.render('app/home', { nombre: res.locals.user.nombre, admin: res.locals.user.isAdmin })
+            res.redirect('/app')
         })
     }).delete((req, res) => {
         let sql = `DELETE FROM monedas WHERE id = ${req.params.id}`
         db.query(sql, (err, result) => {
             if (err) throw err;
-            res.render('app/home', { nombre: res.locals.user.nombre, admin: res.locals.user.isAdmin })
+            res.redirect('/app')
         })
     });
 
@@ -122,13 +139,13 @@ router.route('/categorias/:id/edit')
         let sql = `UPDATE categorias SET nombre='${req.body.nombre}' WHERE id = ${req.params.id}`
         db.query(sql, (err, result) => {
             if (err) throw err;
-            res.render('app/home', { nombre: res.locals.user.nombre, admin: res.locals.user.isAdmin })
+            res.redirect('/app')
         })
     }).delete((req, res) => {
         let sql = `DELETE FROM categorias WHERE id = ${req.params.id}`
         db.query(sql, (err, result) => {
             if (err) throw err;
-            res.render('app/home', { nombre: res.locals.user.nombre, admin: res.locals.user.isAdmin })
+            res.redirect('/app')
         })
     });
 
@@ -151,34 +168,48 @@ router.get('/categorias/edit', (req, res) => {
 
 router.route('/clientes/:id/edit')
     .get((req, res) => {
-        let sql = `SELECT * FROM users WHERE id = ${req.params.id}`
+        let sql = `SELECT * FROM clientes WHERE id = ${req.params.id}`
         db.query(sql, (err, result) => {
             if (err) throw err;
+            let dateString = formatDate(result[0].birthDate)
             res.render('app/clientes', {
                 id: result[0].id,
                 nombre: result[0].nombre.charAt(0).toLocaleUpperCase() + result[0].nombre.slice(1),
-                birthDate: result[0].birthDate
+                birthDate: dateString,
+                imagen: result[0].imagen
             })
         })
     }).put((req, res) => {
-        let sql = `UPDATE users SET nombre='${req.body.nombre}', birthDate='${req.body.birthDate}' WHERE id = ${req.params.id}`
+        let sql = '';
+        if (req.files.imagen.size) {
+            let extension = req.files.imagen.name.split('.').pop();
+            let imgLink = 'public/images/' + req.body.nombre + 'avatar.' + extension;
+            fs.rename(req.files.imagen.path, imgLink, (err) => {
+                if (err) console.log(err);
+            });
+            sql = `UPDATE clientes SET nombre='${req.body.nombre}', birthDate='${req.body.birthDate}', imagen='${imgLink}' WHERE id = ${req.params.id}`
+        } else {
+            sql = `UPDATE clientes SET nombre='${req.body.nombre}', birthDate='${req.body.birthDate}' WHERE id = ${req.params.id}`
+        }
         db.query(sql, (err, result) => {
             if (err) throw err;
-            res.render('app/home', { nombre: res.locals.user.nombre, admin: res.locals.user.isAdmin })
+            res.redirect('/app')
         })
     }).delete((req, res) => {
-        let sql = `DELETE FROM users WHERE id = ${req.params.id}`
+        let sql = `DELETE FROM clientes WHERE id = ${req.params.id}`
         db.query(sql, (err, result) => {
             if (err) throw err;
-            res.render('app/home', { nombre: res.locals.user.nombre, admin: res.locals.user.isAdmin })
+            res.redirect('/app')
         })
     });
 
 router.get('/perfil', (req, res) => {
+    let dateString = formatDate(res.locals.user.birthDate)
     res.render('app/clientes', {
         id: res.locals.user.id,
         nombre: res.locals.user.nombre,
-        birthDate: res.locals.user.birthDate
+        birthDate: dateString,
+        imagen: res.locals.user.imagen
     })
 });
 router.get('/categorias', (req, res) => {
@@ -190,6 +221,7 @@ router.get('/categorias', (req, res) => {
 });
 
 router.use('/gastos', gastosRouter)
+router.use('/reportes', reportesRouter)
 
 
 

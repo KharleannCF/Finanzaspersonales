@@ -1,7 +1,7 @@
 extends ./base.pug
 block contenido    
     div
-        form(action='/users', method='POST')
+        form(action='/users' enctype='multipart/form-data' method='POST')
             div
                 label(for='email') Email
                 input(type='email', name='email', placeholder='Email', id='email')
@@ -22,6 +22,9 @@ block contenido
             div
                 label(for='isAdmin') Administrador
                 input(type='checkbox', name='isAdmin', placeholder='isAdmin', id='isAdmin')
+            div
+                label(for='imagen') Imagen de Perfil: 
+                input(type='file', name='imagen', placeholder='imagen', id='imagen')
             div
                 input(type='submit' value='Iniciar sesión' class='btn btn-info')
 

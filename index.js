@@ -8,12 +8,22 @@ const usersRoutes = require('./routes/users.js');
 const appRoutes = require('./routes/app.js');
 const sessionMiddleware = require('./middlewares/sessionMiddleware.js');
 const methodOverride = require('method-override');
-
+let formidable = require('express-form-data');
+const http = require('http');
+const socket = require('./sockets');
 
 let db = '';
 
 
 const app = express();
+const server = http.Server(app);
+socket(server, session({
+    name: 'session',
+    keys: ['llave1', 'llave2']
+}))
+
+
+
 app.get('/', (req, res) => {
     let sql = 'CREATE DATABASE IF NOT EXISTS finanzas';
     mysql.createConnection({
@@ -33,7 +43,7 @@ app.get('/', (req, res) => {
         if (err) {
             throw err
         } else {
-            res.render('registro')
+            res.redirect('/users')
         }
     })
 
@@ -41,6 +51,8 @@ app.get('/', (req, res) => {
 })
 
 //middleware
+app.use('/static', express.static(__dirname + '/public'));
+app.use(formidable.parse({ keepExtensions: true }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
@@ -67,4 +79,4 @@ app.get('/', (req, res) => {
 //mongoose.connect('mongodb+srv://user1:finanzas29@cluster0-ticnm.mongodb.net/test?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true },
 //    () => console.log('connected to db'))
  */
-app.listen(8080);
+server.listen(8080);
