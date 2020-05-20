@@ -22,8 +22,8 @@ Para ejecutar el proyecto es necesario instalar las dependencias para esto es ne
  El proyecto fue realizado utilizando MySQL como base de datos, por lo tanto es necesario tener un servidor de MySQL
  para garantizar su funcionamiento, para esto es posible usar XAMPP (En este caso activar también el servidor apache) o MySQL
  
- En el archivo *credential.js* cambiar los datos por los correspondientes a la computadora donde se prueben
- Es necesario el que el usuario tenga permisos de administrador en el servidor de MySQL pues esté creará una nueva
+ En el archivo *credentials.js* cambiar los datos por los correspondientes a la computadora donde se prueben
+ Es necesario el que el usuario tenga permisos de administrador en el servidor de MySQL (se recomienda el usuario root) pues esté creará una nueva
  base de datos con sus respectivas tablas a medida que se avance en la aplicación.
  
  ### EndPoints
